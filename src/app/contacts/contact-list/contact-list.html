@@ -1,0 +1,4 @@
+<div class="list-group">
+    <cms-contact-item *ngFor="let c of contacts" [contact]="c" (contactSelected)="onContactSelected($event)">
+    </cms-contact-item>
+</div>
