@@ -1,4 +1,4 @@
-<a class="list-group-item clearfix" style="cursor: pointer" (click)="onSelected()">
+<!-- <a class="list-group-item clearfix" style="cursor: pointer" (click)="onSelected()">
     <div class="pull-left">
         <h4 class="list-group-item-heading">{{ contact.name }}</h4>
         <p class="list-group-item-text">{{ contact.email }}</p>
@@ -7,4 +7,18 @@
     <span class="pull-right">
         <img [src]="contact.imageUrl" [alt]="contact.name" class="img-responsive" style="max-height: 50px;" />
     </span>
-</a>
+</a> -->
+
+<div class="list-group-item clearfix" style="cursor: pointer;" (click)="onSelected()">
+    <div class="pull-left">
+        <h4 class="list-group-item-heading">{{ contact.name }}</h4>
+    </div>
+
+    <span class="pull-right">
+        <img 
+        [src]="contact.imageUrl" 
+        [alt]="contact.name"
+        class="img-responsive img-circle"
+        style="max-height: 50px;" />
+    </span>
+</div>
