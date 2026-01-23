@@ -1,13 +1,14 @@
 <div class="panel panel-default">
     <div class="panel-heading clearfix">
-        <h3 class="panel-title pull-left" style="padding-top: 7px;">Contacts</h3>
+        <h1 class="panel-title pull-left" style="padding-top: 7px; font-size: 24px; font-weight: 600;">Contacts</h1>
         <a class="btn btn-success pull-right" href="#">New Contact</a>
     </div>
 
     <div class="panel-body">
-        <div class="list-group">
-            <cms-contact-item *ngFor="let c of contacts" [contact]="c" (contactSelected)="onContactSelected($event)">
-            </cms-contact-item>
-        </div>
+        <cms-contact-item 
+            *ngFor="let contact of contacts" 
+            [contact]="contact"
+            (contactSelected)="onSelected($event)"
+        ></cms-contact-item>
     </div>
 </div>

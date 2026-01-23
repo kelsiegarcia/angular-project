@@ -9,7 +9,9 @@ import { Contact } from './contact.model';
   styleUrls: ['./contacts.css'],
 })
 export class Contacts {
-  selectedContact?: Contact;
+  // selectedContact?: Contact;
+  selectedContact: Contact | null = null;
+
 
   onSelected(contact: Contact) {
     this.selectedContact = contact;
