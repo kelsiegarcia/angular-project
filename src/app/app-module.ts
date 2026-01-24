@@ -14,6 +14,7 @@ import { DocumentDetail } from './documents/document-detail/document-detail';
 import { MessageItem } from './messages/message-item/message-item';
 import { MessageEdit } from './messages/message-edit/message-edit';
 import { MessageList } from './messages/message-list/message-list';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { MessageList } from './messages/message-list/message-list';
     MessageList
   ],
   imports: [
+    FormsModule,
     BrowserModule
   ],
   providers: [
