@@ -6,9 +6,9 @@ import { Contact } from './contact.model';
 })
 export class ContactsService {
     private contacts: Contact[] = [
-        new Contact('1', 'John Smith', 'john.smith@email.com', '808-555-1234', 
-            'https://picsum.photos/60', []),
-        new Contact('2', 'Jo Smith', 'jo.smith@email.com', '808-555-5678', 'https://picsum.photos/70', [])
+        new Contact('1', 'R. Kent Jackson', 'jacksonk@byui.edu', '208-496-3771', 
+            'assets/images/jacksonk.jpg', []),
+        new Contact('2', 'Rex Barzee', 'barzeer@byui.edu', '208-496-3768', 'assets/images/barzeer.jpg', [])
     ];
 
     getContacts() {
