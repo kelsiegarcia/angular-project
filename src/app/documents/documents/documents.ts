@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './documents.css',
 })
 export class Documents {
-
+  selectedDocument?: Document;
 }
