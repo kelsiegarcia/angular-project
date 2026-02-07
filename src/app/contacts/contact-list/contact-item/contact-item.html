@@ -4,7 +4,11 @@
     </div>
 
     <span class="pull-right">
-        <img [src]="contact.imageUrl" [alt]="contact.name" class="img-responsive"
-            style="max-height: 50px;" />
+        <img  *ngIf="contact?.imageUrl && contact.imageUrl.trim() !== ''"
+            [src]="contact.imageUrl"
+            [alt]="contact.name"
+            class="img-responsive"
+            style="max-height: 50px;" 
+        />
     </span>
 </a>
