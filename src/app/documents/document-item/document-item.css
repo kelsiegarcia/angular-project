@@ -7,3 +7,7 @@
     float: left;
     padding: .25rem
 }
+
+a.active {
+    font-weight: bold;
+}

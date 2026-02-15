@@ -1,5 +1,6 @@
 import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
 
 import { App } from './app';
 import { Header } from './header';
@@ -15,6 +16,8 @@ import { MessageItem } from './messages/message-item/message-item';
 import { MessageEdit } from './messages/message-edit/message-edit';
 import { MessageList } from './messages/message-list/message-list';
 import { FormsModule } from '@angular/forms';
+import { DocumentEdit } from './documents/document-edit/document-edit';
+import { ContactEdit } from './contacts/contact-edit/contact-edit';
 
 @NgModule({
   declarations: [
@@ -30,11 +33,14 @@ import { FormsModule } from '@angular/forms';
     DocumentDetail,
     MessageItem,
     MessageEdit,
-    MessageList
+    MessageList,
+    DocumentEdit,
+    ContactEdit
   ],
   imports: [
     FormsModule,
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners()

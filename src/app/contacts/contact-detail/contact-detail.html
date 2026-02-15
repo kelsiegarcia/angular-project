@@ -10,8 +10,8 @@
 
             <div class="col-xs-4 text-right">
                 <div class="btn-group" style="margin-top: 10px;">
-                    <button type="button" class="btn btn-primary">Edit</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-primary" [routerLink]="['edit']">Edit</button>
+                    <button type="button" class="btn btn-danger" (click)="onDelete()">Delete</button>
                 </div>
             </div>
         </div>

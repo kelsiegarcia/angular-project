@@ -13,6 +13,8 @@ export class DocumentService {
 
   documents: Document[] = [];
 
+  documentChangedEvent = new EventEmitter<Document[]>();
+
   constructor() {
     this.documents = MOCKDOCUMENTS;
   }
@@ -23,5 +25,19 @@ export class DocumentService {
 
   getDocument(id: string): Document | null {
     return this.documents.find(d => d.id === id) || null;
+  }
+
+  deleteDocument(document: Document) {
+    if (!document) {
+      return;
+    }
+
+    const pos = this.documents.indexOf(document);
+    if (pos < 0) {
+      return;
+    }
+
+    this.documents.splice(pos, 1);
+    this.documentChangedEvent.emit(this.documents.slice());
   }
 }
