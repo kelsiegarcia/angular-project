@@ -23,4 +23,8 @@ export class ContactList implements OnInit {
       this.contacts = contacts;
     });
   }
+
+  ngOnDestroy(): void {
+    this.contactService.contactChangedEvent.unsubscribe();
+  }
 }

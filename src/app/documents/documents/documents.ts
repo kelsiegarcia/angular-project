@@ -14,9 +14,9 @@ export class Documents {
   constructor( private documentService: DocumentService) { }
 
   ngOnInit() {
-    this.documentService.documentSelectedEvent.subscribe(
-      (document: Document) => {
-        this.selectedDocument = document;
+    this.documentService.documentChangedEvent.subscribe(
+      (documents: Document[]) => {
+        this.selectedDocument = documents[0] || null;
       }
     );
   }
