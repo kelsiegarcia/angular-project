@@ -15,8 +15,6 @@ export class DocumentService {
   documents: Document[] = [];
   maxDocumentId: number;
 
-  documentChangedEvent = new Subject<Document[]>();
-
   constructor() {
     this.documents = MOCKDOCUMENTS;
     this.maxDocumentId = this.getMaxId();
@@ -50,7 +48,7 @@ export class DocumentService {
     this.maxDocumentId++;
     document.id = this.maxDocumentId.toString();
     this.documents.push(document);
-    this.documentChangedEvent.next(this.documents.slice());
+    this.documentListChangedEvent.next(this.documents.slice());
   }
 
   updateDocument(document: Document, newDocument: Document) {
@@ -66,7 +64,7 @@ export class DocumentService {
     newDocument.id = document.id;
 
     this.documents[pos] = newDocument;
-    this.documentChangedEvent.next(this.documents.slice());
+    this.documentListChangedEvent.next(this.documents.slice());
   }
 
   deleteDocument(document: Document) {
