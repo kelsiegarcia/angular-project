@@ -18,11 +18,11 @@ export class MessageService {
 
   getMessages(): Message[] {
     this.http.get<Message[]>('https://cms-project-af83b-default-rtdb.firebaseio.com/messages.json')
-      .subscribe((messages: Message[]) => {
-        this.messages = messages;
-        this.messages.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
-        this.messageChangedEvent.emit(this.messages.slice());
-      },
+      .subscribe(
+        (messages: Message[]) => {
+          this.messages = messages || [];
+          this.messageChangedEvent.emit(this.messages.slice());
+        },
         (error: any) => {
           console.error('Error fetching messages:', error);
         }
