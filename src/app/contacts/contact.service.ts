@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Contact } from './contact.model';
 import { MOCKCONTACTS } from './MOCKCONTACTS';
 import { Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -14,12 +15,22 @@ export class ContactService {
     private maxContactId: number;
     private contacts: Contact[] = [];
 
-    constructor() {
+    constructor(private http: HttpClient) {
         this.contacts = MOCKCONTACTS;
         this.maxContactId = this.getMaxId();
     }
 
     getContacts(): Contact[] {
+        this.http.get<Contact[]>('https://cms-project-af83b-default-rtdb.firebaseio.com/contacts.json')
+          .subscribe((contacts: Contact[]) => {
+            this.contacts = contacts;
+            this.contacts.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
+            this.contactChangedEvent.next(this.contacts.slice());
+          },
+            (error: any) => {
+              console.error('Error fetching contacts:', error);
+            }
+          );        
         return this.contacts.slice();
     }
 
@@ -80,4 +91,18 @@ export class ContactService {
         const contactsListClone = this.contacts.slice();
         this.contactChangedEvent.next(contactsListClone);
     }
+
+    storeContacts() {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+        this.http
+            .put(
+                'https://cms-project-af83b-default-rtdb.firebaseio.com/contacts.json',
+                JSON.stringify(this.contacts),
+                { headers: headers }
+            )
+            .subscribe(() => {
+                this.contactChangedEvent.next(this.contacts.slice());
+            });
+    }   
 }

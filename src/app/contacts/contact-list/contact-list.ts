@@ -10,15 +10,17 @@ import { ContactService } from '../contact.service';
 })
 export class ContactList implements OnInit {
   contacts: Contact[] = [];
+  term: string = '';
   // @Output() selectedContactEvent = new EventEmitter<Contact>();
 
   constructor(private contactService: ContactService) { }
 
+  search(value: string) {
+    this.term = value;
+  }
 
   ngOnInit() {
     this.contacts = this.contactService.getContacts();
-  
-
     this.contactService.contactChangedEvent.subscribe((contacts: Contact[]) => {
       this.contacts = contacts;
     });

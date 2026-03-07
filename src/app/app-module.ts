@@ -18,6 +18,8 @@ import { MessageList } from './messages/message-list/message-list';
 import { FormsModule } from '@angular/forms';
 import { DocumentEdit } from './documents/document-edit/document-edit';
 import { ContactEdit } from './contacts/contact-edit/contact-edit';
+import { ContactsFilterPipe } from './contacts/contacts-filter-pipe';
+import { HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -35,12 +37,14 @@ import { ContactEdit } from './contacts/contact-edit/contact-edit';
     MessageEdit,
     MessageList,
     DocumentEdit,
-    ContactEdit
+    ContactEdit,
+    ContactsFilterPipe
   ],
   imports: [
     FormsModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners()
