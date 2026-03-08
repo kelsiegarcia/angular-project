@@ -1,46 +1,51 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { Message } from './message.model';
-import { MOCKMESSAGES } from './MOCKMESSAGES';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { Message } from './message.model';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-
 export class MessageService {
   messageChangedEvent = new EventEmitter<Message[]>();
   messages: Message[] = [];
+  maxMessageId: number = 0;
 
-  constructor(private http: HttpClient) {
-    this.messages = MOCKMESSAGES;
-  }
+  constructor(private http: HttpClient) { }
 
-  getMessages(): Message[] {
-    this.http.get<Message[]>('https://cms-project-af83b-default-rtdb.firebaseio.com/messages.json')
+  getMessages(): void {
+    this.http
+      .get<Message[]>('https://cms-project-af83b-default-rtdb.firebaseio.com/messages.json')
       .subscribe(
         (messages: Message[]) => {
           this.messages = messages || [];
+          this.maxMessageId = this.getMaxId();
           this.messageChangedEvent.emit(this.messages.slice());
         },
         (error: any) => {
           console.error('Error fetching messages:', error);
         }
       );
-    return this.messages.slice();
   }
 
   getMessage(id: string): Message | null {
-    return this.messages.find(m => m.id === id) || null;
+    return this.messages.find(message => message.id === id) || null;
   }
 
   addMessage(message: Message): void {
+    if (!message) {
+      return;
+    }
+
+    this.maxMessageId++;
+    message.id = this.maxMessageId.toString();
     this.messages.push(message);
-    this.messageChangedEvent.emit(this.messages.slice());
+    this.storeMessages();
   }
 
   storeMessages(): void {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
 
     this.http
       .put(
@@ -51,5 +56,18 @@ export class MessageService {
       .subscribe(() => {
         this.messageChangedEvent.emit(this.messages.slice());
       });
+  }
+
+  getMaxId(): number {
+    let maxId = 0;
+
+    for (const message of this.messages) {
+      const currentId = Number(message.id);
+      if (currentId > maxId) {
+        maxId = currentId;
+      }
+    }
+
+    return maxId;
   }
 }

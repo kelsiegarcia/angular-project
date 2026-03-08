@@ -1,0 +1,27 @@
+.title {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.top-space {
+  margin-top: 15px;
+}
+
+.button-space {
+  margin-top: 0;
+}
+
+.panel-heading {
+  padding: 15px 20px;
+}
+
+.input-group {
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .button-space {
+    margin-top: 10px;
+    text-align: left;
+  }
+}

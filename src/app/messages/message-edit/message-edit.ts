@@ -21,7 +21,7 @@ export class MessageEdit {
     const msgText = this.msgTextInput.nativeElement.value;
 
     const newMessage = new Message(
-      Date.now().toString(),
+      '',
       subject,
       msgText,
       this.currentSender
