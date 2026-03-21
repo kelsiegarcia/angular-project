@@ -14,11 +14,15 @@ export class MessageEdit {
 
   currentSender = '1';
 
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService) { }
 
   onSendMessage(): void {
-    const subject = this.subjectInput.nativeElement.value;
-    const msgText = this.msgTextInput.nativeElement.value;
+    const subject = this.subjectInput.nativeElement.value.trim();
+    const msgText = this.msgTextInput.nativeElement.value.trim();
+
+    if (!subject || !msgText) {
+      return;
+    }
 
     const newMessage = new Message('', subject, msgText, this.currentSender);
 

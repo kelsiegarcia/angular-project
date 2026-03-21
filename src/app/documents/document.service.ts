@@ -1,8 +1,8 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Document } from './documents.model';
-import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import { Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root',
@@ -11,20 +11,17 @@ export class DocumentService {
   documentListChangedEvent = new Subject<Document[]>();
 
   documents: Document[] = [];
-  maxDocumentId: number;
 
-  constructor(private http: HttpClient) {
-    this.documents = MOCKDOCUMENTS;
-    this.maxDocumentId = this.getMaxId();
-  }
+  constructor(private http: HttpClient) { }
+
 
   getDocuments() {
     this.http
-      .get<Document[]>('https://cms-project-af83b-default-rtdb.firebaseio.com/documents.json')
+      .get<{ message: string; documents: Document[] }>('http://localhost:3000/documents')
       .subscribe(
-        (documents: Document[]) => {
-          this.documents = documents;
-          this.maxDocumentId = this.getMaxId();
+        (response) => {
+          this.documents = response.documents;
+          // this.maxDocumentId = this.getMaxId();
           this.documents.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
           this.documentListChangedEvent.next(this.documents.slice());
         },
@@ -55,26 +52,48 @@ export class DocumentService {
       return;
     }
 
-    this.maxDocumentId++;
-    document.id = this.maxDocumentId.toString();
-    this.documents.push(document);
-    this.storeDocuments();
+    document.id = '';
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    this.http
+      .post<{ message: string; document: Document }>(
+        'http://localhost:3000/documents',
+        document,
+        { headers: headers }
+      )
+      .subscribe((responseData) => {
+        this.documents.push(responseData.document);
+        this.documents.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+        this.documentListChangedEvent.next(this.documents.slice());
+      });
   }
 
-  updateDocument(document: Document, newDocument: Document) {
-    if (!document || !newDocument) {
+  updateDocument(originalDocument: Document, newDocument: Document) {
+    if (!originalDocument || !newDocument) {
       return;
     }
 
-    const pos = this.documents.findIndex((d) => d.id === document.id);
+    const pos = this.documents.findIndex((d) => d.id === originalDocument.id);
+
     if (pos < 0) {
       return;
     }
 
-    newDocument.id = document.id;
+    newDocument.id = originalDocument.id;
+    newDocument._id = originalDocument._id;
 
-    this.documents[pos] = newDocument;
-    this.storeDocuments();
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    this.http
+      .put('http://localhost:3000/documents/' + originalDocument.id, newDocument, {
+        headers: headers,
+      })
+      .subscribe(() => {
+        this.documents[pos] = newDocument;
+        this.documents.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+        this.documentListChangedEvent.next(this.documents.slice());
+      });
   }
 
   deleteDocument(document: Document) {
@@ -83,26 +102,16 @@ export class DocumentService {
     }
 
     const pos = this.documents.findIndex((d) => d.id === document.id);
+
     if (pos < 0) {
       return;
     }
 
-    this.documents.splice(pos, 1);
-
-    this.storeDocuments();
+    this.http.delete('http://localhost:3000/documents/' + document.id).subscribe(() => {
+      this.documents.splice(pos, 1);
+      this.documents.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+      this.documentListChangedEvent.next(this.documents.slice());
+    });
   }
 
-  storeDocuments() {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-    this.http
-      .put(
-        'https://cms-project-af83b-default-rtdb.firebaseio.com/documents.json',
-        JSON.stringify(this.documents),
-        { headers: headers },
-      )
-      .subscribe(() => {
-        this.documentListChangedEvent.next(this.documents.slice());
-      });
-  }
 }

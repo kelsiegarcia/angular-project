@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 const Message = require('../models/message');
 const sequenceGenerator = require('./sequenceGenerator');
-
+const Contact = require('../models/contact');
 
 // GET all messages
 router.get('/', function (req, res, next) {
-  Message.find()
+  Message.find().populate('sender')
     .then((messages) => {
       res.status(200).json({
         message: 'messages fetched successfully!',
@@ -15,66 +15,97 @@ router.get('/', function (req, res, next) {
     })
     .catch((err) => {
       res.status(500).json({
-        message: 'An error occured',
+        message: 'An error occurred',
         error: err
       });
     });
 });
 
 // POST a new message
-router.post('/', function (req, res, next) {
-  const newMessageId = sequenceGenerator.nextId('messages');
-  
-  const newMessage = new Message({
-    id: newMessageId,
-    subject: req.body.subject,
-    msgText: req.body.msgText,
-    sender: req.body.sender,
-  });
+router.post('/', async function (req, res, next) {
+  try {
+    if (!req.body.subject || !req.body.msgText) {
+      return res.status(400).json({
+        message: 'Subject and message text are required'
+      });
+    }
+    const newMessageId = sequenceGenerator.nextId('messages');
 
-  newMessage.save()
-    .then((createdMessage) => {
-      res.status(201).json({
-        message: 'message created successfully!',
-        message: createdMessage
-      });
-    })
-    .catch((err) => {
-      res.status(201).json({
-        message: 'Message created successfully!',
-        newMessage: createdMessage
-      });
+    let senderId = null;
+
+    if (req.body.sender) {
+      const contact = await Contact.findOne({ id: req.body.sender });
+
+      if (!contact) {
+        return res.status(400).json({
+          message: 'Sender contact not found'
+        });
+      }
+
+      senderId = contact._id;
+    }
+
+    const newMessage = new Message({
+      id: newMessageId,
+      subject: req.body.subject,
+      msgText: req.body.msgText,
+      sender: senderId
     });
+
+    const createdMessage = await newMessage.save();
+    console.log('req.body =', req.body);
+    res.status(201).json({
+      message: 'Message created successfully!',
+      messageObject: createdMessage
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: 'An error occurred',
+      error: err
+    });
+  }
 });
 
 // PUT update a message
-router.put('/:id', function (req, res, next) {
-  Message.findOne({ id: req.params.id })
-    .then((message) => {
-      if (!message) {
-        return res.status(404).json({
-          message: 'message not found!'
+router.put('/:id', async function (req, res, next) {
+  try {
+    const message = await Message.findOne({ id: req.params.id });
+
+    if (!message) {
+      return res.status(404).json({
+        message: 'Message not found!'
+      });
+    }
+
+    let senderId = null;
+
+    if (req.body.sender) {
+      const contact = await Contact.findOne({ id: req.body.sender });
+
+      if (!contact) {
+        return res.status(400).json({
+          message: 'Sender contact not found'
         });
       }
-      message.subject = req.body.subject;
-      message.msgText = req.body.msgText;
-      message.sender = req.body.sender;
 
-      return Message.updateOne({ id: req.params.id }, message);
-    })
-    .then((result) => {
-      if (!result) return;
+      senderId = contact._id;
+    }
 
-      res.status(200).json({
-        message: 'message updated successfully!',
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: 'An error occurred',
-        error: err
-      });
+    message.subject = req.body.subject;
+    message.msgText = req.body.msgText;
+    message.sender = senderId;
+
+    await Message.updateOne({ id: req.params.id }, message);
+
+    res.status(200).json({
+      message: 'Message updated successfully!'
     });
+  } catch (err) {
+    res.status(500).json({
+      message: 'An error occurred',
+      error: err
+    });
+  }
 });
 
 // DELETE a message
@@ -94,4 +125,3 @@ router.delete('/:id', function (req, res, next) {
 });
 
 module.exports = router;
-

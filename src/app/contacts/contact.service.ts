@@ -6,22 +6,22 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
+
 export class ContactService {
   contactSelectedEvent = new Subject<Contact>();
   contactChangedEvent = new Subject<Contact[]>();
 
-  private maxContactId: number = 0;
+  // private maxContactId: number = 0;
   private contacts: Contact[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getContacts(): void {
     this.http
-      .get<Contact[]>('https://cms-project-af83b-default-rtdb.firebaseio.com/contacts.json')
+      .get<{ message: string; contacts: Contact[] }>('http://localhost:3000/contacts')
       .subscribe(
-        (contacts: Contact[]) => {
-          this.contacts = contacts || [];
-          this.maxContactId = this.getMaxId();
+        (response) => {
+          this.contacts = response.contacts;
           this.contacts.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
           this.contactChangedEvent.next(this.contacts.slice());
         },
@@ -36,28 +36,26 @@ export class ContactService {
     return found ? { ...found } : null;
   }
 
-  getMaxId(): number {
-    let maxId = 0;
-
-    this.contacts.forEach((contact) => {
-      const currentId = parseInt(contact.id, 10);
-      if (currentId > maxId) {
-        maxId = currentId;
-      }
-    });
-
-    return maxId;
-  }
-
   addContact(contact: Contact): void {
     if (!contact) {
       return;
     }
 
-    this.maxContactId++;
-    contact.id = this.maxContactId.toString();
-    this.contacts.push(contact);
-    this.storeContacts();
+    contact.id = '';
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    this.http
+      .post<{ message: string; contact: Contact }>(
+        'http://localhost:3000/contacts',
+        contact,
+        { headers: headers }
+      )
+      .subscribe((responseData) => {
+        this.contacts.push(responseData.contact);
+        this.contacts.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+        this.contactChangedEvent.next(this.contacts.slice());
+      });
   }
 
   updateContact(originalContact: Contact, newContact: Contact): void {
@@ -71,8 +69,21 @@ export class ContactService {
     }
 
     newContact.id = originalContact.id;
-    this.contacts[pos] = newContact;
-    this.storeContacts();
+    newContact._id = originalContact._id;
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    this.http
+      .put(
+        `http://localhost:3000/contacts/${originalContact.id}`,
+        newContact,
+        { headers: headers }
+      )
+      .subscribe(() => {
+        this.contacts[pos] = newContact;
+        this.contacts.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+        this.contactChangedEvent.next(this.contacts.slice());
+      });
   }
 
   deleteContact(contact: Contact): void {
@@ -81,25 +92,29 @@ export class ContactService {
     }
 
     const pos = this.contacts.findIndex((c) => c.id === contact.id);
+
     if (pos < 0) {
       return;
     }
 
-    this.contacts.splice(pos, 1);
-    this.storeContacts();
-  }
+    this.http.delete('http://localhost:3000/contacts/' + contact.id).subscribe(() => {
+      this.contacts.splice(pos, 1);
+      this.contacts.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+      this.contactChangedEvent.next(this.contacts.slice());
+    });
 
-  storeContacts(): void {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    // storeContacts(): void {
+    //   const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    this.http
-      .put(
-        'https://cms-project-af83b-default-rtdb.firebaseio.com/contacts.json',
-        JSON.stringify(this.contacts),
-        { headers: headers },
-      )
-      .subscribe(() => {
-        this.contactChangedEvent.next(this.contacts.slice());
-      });
+    //   this.http
+    //     .put(
+    //       'https://cms-project-af83b-default-rtdb.firebaseio.com/contacts.json',
+    //       JSON.stringify(this.contacts),
+    //       { headers: headers },
+    //     )
+    //     .subscribe(() => {
+    //       this.contactChangedEvent.next(this.contacts.slice());
+    //     });
+    // }
   }
 }

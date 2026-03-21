@@ -11,14 +11,25 @@ import { Contact } from '../../contacts/contact.model';
 })
 export class MessageItem {
   @Input() message!: Message;
-  messageSender: string;
+  messageSender: string = '';
 
-  constructor(private contactService: ContactService) {}
+  constructor(private contactService: ContactService) { }
 
   ngOnInit() {
-    // Attempt to find the contact based on the sender ID
+    if (!this.message || !this.message.sender) {
+      this.messageSender = '';
+      return;
+    }
+
+    console.log('message =', this.message);
+    console.log('sender =', this.message.sender);
+
+    if (typeof this.message.sender === 'object') {
+      this.messageSender = this.message.sender.name || '';
+      return;
+    }
+
     const contact: Contact | null = this.contactService.getContact(this.message.sender);
-    // If the contact exists, use its name; otherwise, use the sender ID
     this.messageSender = contact ? contact.name : this.message.sender;
   }
 }

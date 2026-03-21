@@ -6,5 +6,6 @@ export class Contact {
     public phone: string,
     public imageUrl: string,
     public group: Contact[] | null,
-  ) {}
+    public _id?: string,
+  ) { }
 }
