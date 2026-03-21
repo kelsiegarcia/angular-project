@@ -14,18 +14,13 @@ export class MessageEdit {
 
   currentSender = '1';
 
-  constructor(private messageService: MessageService) { }
+  constructor(private messageService: MessageService) {}
 
   onSendMessage(): void {
     const subject = this.subjectInput.nativeElement.value;
     const msgText = this.msgTextInput.nativeElement.value;
 
-    const newMessage = new Message(
-      '',
-      subject,
-      msgText,
-      this.currentSender
-    );
+    const newMessage = new Message('', subject, msgText, this.currentSender);
 
     this.messageService.addMessage(newMessage);
     this.onClear();

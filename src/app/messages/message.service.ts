@@ -3,14 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Message } from './message.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MessageService {
   messageChangedEvent = new EventEmitter<Message[]>();
   messages: Message[] = [];
   maxMessageId: number = 0;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getMessages(): void {
     this.http
@@ -23,12 +23,12 @@ export class MessageService {
         },
         (error: any) => {
           console.error('Error fetching messages:', error);
-        }
+        },
       );
   }
 
   getMessage(id: string): Message | null {
-    return this.messages.find(message => message.id === id) || null;
+    return this.messages.find((message) => message.id === id) || null;
   }
 
   addMessage(message: Message): void {
@@ -44,14 +44,14 @@ export class MessageService {
 
   storeMessages(): void {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
 
     this.http
       .put(
         'https://cms-project-af83b-default-rtdb.firebaseio.com/messages.json',
         JSON.stringify(this.messages),
-        { headers: headers }
+        { headers: headers },
       )
       .subscribe(() => {
         this.messageChangedEvent.emit(this.messages.slice());

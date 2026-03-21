@@ -8,5 +8,5 @@ import { Document } from '../documents.model';
   styleUrl: './document-item.css',
 })
 export class DocumentItem {
-@Input() document!: Document;
+  @Input() document!: Document;
 }

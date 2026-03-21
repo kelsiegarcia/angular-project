@@ -19,27 +19,29 @@ export class DocumentService {
   }
 
   getDocuments() {
-    this.http.get<Document[]>('https://cms-project-af83b-default-rtdb.firebaseio.com/documents.json')
-      .subscribe((documents: Document[]) => {
-        this.documents = documents;
-        this.maxDocumentId = this.getMaxId();
-        this.documents.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
-        this.documentListChangedEvent.next(this.documents.slice());
-      },
+    this.http
+      .get<Document[]>('https://cms-project-af83b-default-rtdb.firebaseio.com/documents.json')
+      .subscribe(
+        (documents: Document[]) => {
+          this.documents = documents;
+          this.maxDocumentId = this.getMaxId();
+          this.documents.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+          this.documentListChangedEvent.next(this.documents.slice());
+        },
         (error: any) => {
-        console.error('Error fetching documents:', error);
-      }
-    );
+          console.error('Error fetching documents:', error);
+        },
+      );
   }
 
   getDocument(id: string): Document | null {
-    const index = this.documents.findIndex(d => d.id === id);
+    const index = this.documents.findIndex((d) => d.id === id);
     return index !== -1 ? { ...this.documents[index] } : null;
   }
 
   getMaxId(): number {
     let maxId = 0;
-    this.documents.forEach(document => {
+    this.documents.forEach((document) => {
       const currentId = parseInt(document.id, 10);
       if (currentId > maxId) {
         maxId = currentId;
@@ -56,7 +58,7 @@ export class DocumentService {
     this.maxDocumentId++;
     document.id = this.maxDocumentId.toString();
     this.documents.push(document);
-    this.storeDocuments();  
+    this.storeDocuments();
   }
 
   updateDocument(document: Document, newDocument: Document) {
@@ -64,15 +66,15 @@ export class DocumentService {
       return;
     }
 
-    const pos = this.documents.findIndex(d => d.id === document.id);
+    const pos = this.documents.findIndex((d) => d.id === document.id);
     if (pos < 0) {
       return;
     }
-    
+
     newDocument.id = document.id;
 
     this.documents[pos] = newDocument;
-    this.storeDocuments();;
+    this.storeDocuments();
   }
 
   deleteDocument(document: Document) {
@@ -80,7 +82,7 @@ export class DocumentService {
       return;
     }
 
-    const pos = this.documents.findIndex(d => d.id === document.id);
+    const pos = this.documents.findIndex((d) => d.id === document.id);
     if (pos < 0) {
       return;
     }
@@ -97,7 +99,7 @@ export class DocumentService {
       .put(
         'https://cms-project-af83b-default-rtdb.firebaseio.com/documents.json',
         JSON.stringify(this.documents),
-        { headers: headers }
+        { headers: headers },
       )
       .subscribe(() => {
         this.documentListChangedEvent.next(this.documents.slice());

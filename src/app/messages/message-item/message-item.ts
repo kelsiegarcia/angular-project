@@ -21,5 +21,4 @@ export class MessageItem {
     // If the contact exists, use its name; otherwise, use the sender ID
     this.messageSender = contact ? contact.name : this.message.sender;
   }
-
 }

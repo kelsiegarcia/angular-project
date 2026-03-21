@@ -4,7 +4,6 @@ import { DocumentService } from '../document.service';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
-
 @Component({
   selector: 'cms-document-edit',
   standalone: false,
@@ -20,7 +19,7 @@ export class DocumentEdit implements OnInit {
   constructor(
     private documentService: DocumentService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -48,7 +47,7 @@ export class DocumentEdit implements OnInit {
       value.name,
       value.description,
       value.url,
-      this.editMode ? this.originalDocument.children : []
+      this.editMode ? this.originalDocument.children : [],
     );
 
     if (this.editMode) {

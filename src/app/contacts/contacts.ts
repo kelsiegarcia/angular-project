@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Contact } from './contact.model';
 import { ContactService } from './contact.service';
 
-
 @Component({
   selector: 'cms-contacts',
   standalone: false,
@@ -14,14 +13,12 @@ export class Contacts {
   selectedContact: Contact | null = null;
 
   // inject the ContactService into the Contacts component
-  constructor(private contactService: ContactService) { }
+  constructor(private contactService: ContactService) {}
 
   ngOnInit() {
-    this.contactService.contactSelectedEvent.subscribe(
-      (contact: Contact) => {
-        this.onSelected(contact);
-      }
-    );
+    this.contactService.contactSelectedEvent.subscribe((contact: Contact) => {
+      this.onSelected(contact);
+    });
   }
 
   onSelected(contact: Contact) {

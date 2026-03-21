@@ -11,14 +11,11 @@ import { DocumentService } from '../document.service';
 export class Documents {
   selectedDocument: Document | null = null;
 
-  constructor( private documentService: DocumentService) { }
+  constructor(private documentService: DocumentService) {}
 
   ngOnInit() {
-    this.documentService.documentListChangedEvent.subscribe(
-      (documents: Document[]) => {
-        this.selectedDocument = documents[0] || null;
-      }
-    );
+    this.documentService.documentListChangedEvent.subscribe((documents: Document[]) => {
+      this.selectedDocument = documents[0] || null;
+    });
   }
-
 }

@@ -1,14 +1,19 @@
-<a class="list-group-item clearfix" style="cursor: pointer" [routerLink]="['/contacts', contact.id]">
-    <div class="pull-left">
-        <h4 class="list-group-item-heading">{{ contact.name }}</h4>
-    </div>
+<a
+  class="list-group-item clearfix"
+  style="cursor: pointer"
+  [routerLink]="['/contacts', contact.id]"
+>
+  <div class="pull-left">
+    <h4 class="list-group-item-heading">{{ contact.name }}</h4>
+  </div>
 
-    <span class="pull-right">
-        <img  *ngIf="contact?.imageUrl && contact.imageUrl.trim() !== ''"
-            [src]="contact.imageUrl"
-            [alt]="contact.name"
-            class="img-responsive"
-            style="max-height: 50px;" 
-        />
-    </span>
+  <span class="pull-right">
+    <img
+      *ngIf="contact?.imageUrl && contact.imageUrl.trim() !== ''"
+      [src]="contact.imageUrl"
+      [alt]="contact.name"
+      class="img-responsive"
+      style="max-height: 50px"
+    />
+  </span>
 </a>

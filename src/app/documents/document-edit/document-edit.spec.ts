@@ -8,9 +8,8 @@ describe('DocumentEdit', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DocumentEdit]
-    })
-    .compileComponents();
+      declarations: [DocumentEdit],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DocumentEdit);
     component = fixture.componentInstance;

@@ -1,25 +1,25 @@
 <div class="panel panel-default" xmlns="http://www.w3.org/1999/html">
-    <div class="panel-heading">
-        <div class="row pad-all">
-            <h4 class="title margin-left-right">{{document?.name}}</h4>
-            <div class="row pull-right margin-left-right">
-                <a class="btn btn-primary action-btn" (click)="onView()" href="javascript:void(0)">View</a>
-                <a class="btn btn-info action-btn" [routerLink]="['edit']">Edit</a>
-                <a class="btn btn-danger" (click)="onDelete()">Delete</a>
-            </div>
-        </div>
+  <div class="panel-heading">
+    <div class="row pad-all">
+      <h4 class="title margin-left-right">{{ document?.name }}</h4>
+      <div class="row pull-right margin-left-right">
+        <a class="btn btn-primary action-btn" (click)="onView()" href="javascript:void(0)">View</a>
+        <a class="btn btn-info action-btn" [routerLink]="['edit']">Edit</a>
+        <a class="btn btn-danger" (click)="onDelete()">Delete</a>
+      </div>
     </div>
-    <div class="panel-body">
-        <div class="pad-left-right">
-            <div class="row">
-                <label>Description:</label><br>
-                <span class="label-value">{{document?.description}}</span>
-            </div>
-            <br>
-            <div class="row">
-                <label>URL:</label><br>
-                <span class="label-value">{{document?.url}}</span>
-            </div>
-        </div>
+  </div>
+  <div class="panel-body">
+    <div class="pad-left-right">
+      <div class="row">
+        <label>Description:</label><br />
+        <span class="label-value">{{ document?.description }}</span>
+      </div>
+      <br />
+      <div class="row">
+        <label>URL:</label><br />
+        <span class="label-value">{{ document?.url }}</span>
+      </div>
     </div>
+  </div>
 </div>

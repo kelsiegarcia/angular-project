@@ -1,29 +1,25 @@
 <div class="panel panel-default">
-    <div class="panel-body">
-        <form id="document-edit">
-            <div class="row">
-                <div class="col-sm-12 form-group">
-                    <label for="subject">Subject</label>
-                    <input type="text" id="subject" #subject class="form-control" size="120" max="120">
-                </div>
+  <div class="panel-body">
+    <form id="document-edit">
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" #subject class="form-control" size="120" max="120" />
+        </div>
 
-                <div class="col-sm-12 form-group">
-                    <label for="msgText">Message</label>
-                    <input type="text" id="msgText" #msgText class="form-control" max="255" size="120">
-                </div>
-            </div>
+        <div class="col-sm-12 form-group">
+          <label for="msgText">Message</label>
+          <input type="text" id="msgText" #msgText class="form-control" max="255" size="120" />
+        </div>
+      </div>
 
-            <div class="row">
-                <div class="col-xs-12">
-                    <button class="btn btn-success" type="button" (click)="onSendMessage()">
-                        Send
-                    </button>
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-success" type="button" (click)="onSendMessage()">Send</button>
 
-                    <button class="btn btn-danger" type="button" (click)="onClear()">
-                        Clear
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
+          <button class="btn btn-danger" type="button" (click)="onClear()">Clear</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

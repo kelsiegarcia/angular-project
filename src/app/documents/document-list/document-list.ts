@@ -9,19 +9,20 @@ import { Subscription } from 'rxjs';
   templateUrl: './document-list.html',
   styleUrls: ['./document-list.css'],
 })
-
-export class DocumentList implements OnInit, OnDestroy{
+export class DocumentList implements OnInit, OnDestroy {
   private subscription: Subscription;
   documents: Document[] = [];
 
-  constructor(private documentService: DocumentService) { }
+  constructor(private documentService: DocumentService) {}
 
   ngOnInit(): void {
     this.documentService.getDocuments();
 
-    this.subscription = this.documentService.documentListChangedEvent.subscribe((documentsList: Document[]) => {
-      this.documents = documentsList;
-    });
+    this.subscription = this.documentService.documentListChangedEvent.subscribe(
+      (documentsList: Document[]) => {
+        this.documents = documentsList;
+      },
+    );
   }
 
   ngOnDestroy(): void {

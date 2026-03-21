@@ -13,14 +13,12 @@ export class MessageList implements OnInit, OnDestroy {
   messages: Message[] = [];
   private subscription!: Subscription;
 
-  constructor(private messageService: MessageService) { }
+  constructor(private messageService: MessageService) {}
 
   ngOnInit(): void {
-    this.subscription = this.messageService.messageChangedEvent.subscribe(
-      (messages: Message[]) => {
-        this.messages = messages;
-      }
-    );
+    this.subscription = this.messageService.messageChangedEvent.subscribe((messages: Message[]) => {
+      this.messages = messages;
+    });
 
     this.messageService.getMessages();
   }

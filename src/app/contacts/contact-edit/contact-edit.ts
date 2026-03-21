@@ -16,10 +16,12 @@ export class ContactEdit implements OnInit {
   groupContacts: Contact[] = [];
   editMode: boolean = false;
   id: string;
-  
-  constructor(private contactService: ContactService,
+
+  constructor(
+    private contactService: ContactService,
     private route: ActivatedRoute,
-    private router: Router) {}
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     // Initialization logic here
@@ -36,7 +38,7 @@ export class ContactEdit implements OnInit {
       }
       this.editMode = true;
       this.contact = JSON.parse(JSON.stringify(this.originalContact));
-    }); 
+    });
   }
 
   onCancel() {
@@ -52,7 +54,7 @@ export class ContactEdit implements OnInit {
       value.email,
       value.phone,
       value.imageUrl,
-      this.editMode ? this.originalContact.group : []
+      this.editMode ? this.originalContact.group : [],
     );
 
     if (this.editMode) {

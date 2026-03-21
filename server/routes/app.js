@@ -4,7 +4,7 @@ var path = require('path');
 
 // Get home page
 router.get('/', function (req, res, next) {
-    res.sendFile(path.join(__dirname, '../../dist/cms/browser/index.html'));
+  res.sendFile(path.join(__dirname, '../../dist/cms/browser/index.html'));
 });
 
 module.exports = router;

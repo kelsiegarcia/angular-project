@@ -15,11 +15,11 @@ export class DocumentDetail {
 
   nativeWindow: any;
 
-  constructor (
+  constructor(
     private documentService: DocumentService,
     private router: Router,
     private route: ActivatedRoute,
-    private windRef: WindRefService
+    private windRef: WindRefService,
   ) {
     this.nativeWindow = this.windRef.getNativeWindow();
   }
@@ -42,5 +42,4 @@ export class DocumentDetail {
     this.documentService.deleteDocument(this.document);
     this.router.navigate(['/documents']);
   }
-
-} 
+}

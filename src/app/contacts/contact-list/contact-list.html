@@ -11,8 +11,12 @@
           class="form-control"
           placeholder="Enter a search value"
           #searchBox
-          (keyup)="search(searchBox.value)">
-        <div class="glyphicon glyphicon-search input-group-addon" (click)="search(searchBox.value)"></div>
+          (keyup)="search(searchBox.value)"
+        />
+        <div
+          class="glyphicon glyphicon-search input-group-addon"
+          (click)="search(searchBox.value)"
+        ></div>
       </div>
 
       <div class="pull-right pad-left-right">
@@ -22,9 +26,7 @@
   </div>
 
   <div class="panel-body">
-    <cms-contact-item
-      *ngFor="let contact of contacts | contactsFilter: term"
-      [contact]="contact">
+    <cms-contact-item *ngFor="let contact of contacts | contactsFilter: term" [contact]="contact">
     </cms-contact-item>
   </div>
 </div>
